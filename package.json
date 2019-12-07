@@ -20,7 +20,7 @@
   "scripts": {
     "start": "nodemon app.js",
     "dev": "nodemon app.js",
-    "deploy": "gh-pages -d dist"
+    "deploy": "nodemon app.js"
   },
   "keywords": [],
   "description": ""
