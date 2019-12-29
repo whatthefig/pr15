@@ -17,8 +17,4 @@ https://github.com/whatthefig/pr13
 - скачайте репозиторий на свой пк
 - установите Node.js
 - установите модули командой npm install
-<<<<<<< HEAD
 - запустите сервер командой npm run start
-=======
-- запустите сервер командой npm run start
->>>>>>> b4d9a3b2f0cb633d203de8a4072562311e9e727b
