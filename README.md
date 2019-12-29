@@ -2,11 +2,7 @@
 
 https://github.com/whatthefig/pr13
 
-<<<<<<< HEAD
-*v1.0.1git *
-=======
 *v1.0.1*
->>>>>>> b4d9a3b2f0cb633d203de8a4072562311e9e727b
 
 В проекте реализовано:
 
