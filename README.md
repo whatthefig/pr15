@@ -1,6 +1,6 @@
 <h1>Практическая работа №13</h1>
 
-https://github.com/whatthefig/Pr12
+https://github.com/whatthefig/pr13
 
 *v1.0.1*
 
