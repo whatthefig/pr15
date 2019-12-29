@@ -10,6 +10,7 @@ module.exports.createUser = (req, res) => {
 module.exports.findUser = (req, res) => {
   User.findById(req.params.id)
     .then((user) => {
+      // eslint-disable-next-line no-throw-literal
       if (!user) throw ({ message: 'Нет пользователя с таким id' });
       return user;
     })
