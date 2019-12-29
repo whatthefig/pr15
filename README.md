@@ -2,7 +2,7 @@
 
 https://github.com/whatthefig/Pr12
 
-*v1.0.1git *
+*v1.0.1*
 
 В проекте реализовано:
 
