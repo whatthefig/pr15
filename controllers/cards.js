@@ -10,6 +10,7 @@ module.exports.createCard = (req, res) => {
 module.exports.deleteCard = (req, res) => {
   Card.findByIdAndDelete(req.params.cardId)
     .then((card) => {
+      // eslint-disable-next-line no-throw-literal
       if (!card) throw ({ message: 'Пользователь не найден' });
       return card;
     })
