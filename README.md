@@ -2,7 +2,7 @@
 
 https://github.com/whatthefig/pr13
 
-*v1.0.1*
+*v0.0.2*
 
 В проекте реализовано:
 
