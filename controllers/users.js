@@ -10,13 +10,13 @@ module.exports.createUser = (req, res) => {
 module.exports.findUser = (req, res) => {
   User.findById(req.params.id)
     .then((user) => {
-      // eslint-disable-next-line no-throw-literal
-      if (!user) throw ({ message: 'Нет пользователя с таким id' });
+      const error = 'Пользователь не найден';
+      if (!user) throw error;
       return user;
     })
     .then((user) => res.send(user))
-    .catch((err) => res.status(404).send({ message: err }));
-}
+    .catch((err) => res.status(500).send({ message: err }));
+};
 
 module.exports.getUsers = (req, res) => {
   User.find({})

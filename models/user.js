@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
       message: 'Эта строка должна быть URL',
     },
     required: true,
-  }
+  },
 });
 
 module.exports = mongoose.model('user', userSchema);
