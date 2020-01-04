@@ -8,18 +8,20 @@ module.exports.createUser = (req, res) => {
 };
 
 module.exports.findUser = (req, res) => {
-  User.findById(req.params.id)
+  const { _id } = req.params;
+  User.findById(_id)
     .then((user) => {
-      const error = 'Пользователь не найден';
-      if (!user) throw error;
-      return user;
+      const error = { message: 'Пользователь не найден', code: 404 };
+      if (!user) {
+        throw error;
+      }
+      res.json(user);
     })
-    .then((user) => res.send(user))
-    .catch((err) => res.status(500).send({ message: err }));
+    .catch((err) => res.status(err.code || 500).json({ message: err.message }));
 };
 
 module.exports.getUsers = (req, res) => {
   User.find({})
-    .then((user) => res.send({ data: user }))
+    .then((users) => res.send({ users }))
     .catch((err) => res.status(500).send({ message: err }));
 };

@@ -13,18 +13,20 @@ module.exports.createCard = (req, res) => {
 };
 
 module.exports.deleteCard = (req, res) => {
-  Card.findByIdAndDelete(req.params.cardId)
+  const { _id } = req.params;
+  Card.findByIdAndDelete(_id)
     .then((card) => {
-      const error = 'Объект не найден';
-      if (!card) throw error;
-      return card;
+      const error = { message: 'Объект не найден', code: 404 };
+      if (!card) {
+        throw error;
+      }
+      res.json(card);
     })
-    .then((card) => res.send(card))
-    .catch((err) => res.status(500).send({ message: err }));
+    .catch((err) => res.status(err.code || 500).json({ message: err.message }));
 };
 
 module.exports.getCards = (req, res) => {
   Card.find({})
-    .then((card) => res.send({ card }))
+    .then((cards) => res.send({ cards }))
     .catch((err) => res.status(500).send({ message: err }));
 };
