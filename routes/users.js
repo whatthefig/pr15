@@ -4,7 +4,7 @@ const {
 } = require('../controllers/users');
 
 userRout.get('/users', getUsers);
-userRout.get('/users/:_id', findUser);
+userRout.get('/users/:id', findUser);
 userRout.post('/users', createUser);
 
 module.exports = userRout;

@@ -13,8 +13,8 @@ module.exports.createCard = (req, res) => {
 };
 
 module.exports.deleteCard = (req, res) => {
-  const { _id } = req.params;
-  Card.findByIdAndDelete(_id)
+  const { id } = req.params;
+  Card.findByIdAndDelete(id)
     .then((card) => {
       const error = { message: 'Объект не найден', code: 404 };
       if (!card) {

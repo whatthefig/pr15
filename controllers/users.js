@@ -8,12 +8,17 @@ module.exports.createUser = (req, res) => {
 };
 
 module.exports.findUser = (req, res) => {
-  const { _id } = req.params;
-  User.findById(_id)
+  const { id } = req.params;
+  class MyError extends Error {
+    constructor(message, code) {
+      super(message);
+      this.code = code;
+    }
+  }
+  User.findById(id)
     .then((user) => {
-      const error = { message: 'Пользователь не найден', code: 404 };
       if (!user) {
-        throw error;
+        throw new MyError('Пользователь не найден', 404);
       }
       res.json(user);
     })
