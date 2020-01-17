@@ -1,24 +1,32 @@
 const Card = require('../models/card');
 
 module.exports.createCard = (req, res) => {
-  const { name, link, owner, likes, createdAt } = req.body;
-  Card.create({ name, link, owner, likes, createdAt })
+  const {
+    name, link, likes, createdAt,
+  } = req.body;
+  const owner = req.user._id;
+  Card.create({
+    name, link, owner, likes, createdAt,
+  })
     .then((card) => res.send({ card }))
     .catch((err) => res.status(500).send({ message: err }));
 };
 
 module.exports.deleteCard = (req, res) => {
-  Card.findByIdAndDelete(req.params.cardId)
+  const { id } = req.params;
+  Card.findByIdAndDelete(id)
     .then((card) => {
-      if (!card) throw ({ message: 'Пользователь не найден' });
-      return card;
+      const error = { message: 'Объект не найден', code: 404 };
+      if (!card) {
+        throw error;
+      }
+      res.json(card);
     })
-    .then((card) => res.send(card))
-    .catch((err) => res.status(404).send({ message: err }));
+    .catch((err) => res.status(err.code || 500).json({ message: err.message }));
 };
 
-module.exports.getCard = (req, res) => {
+module.exports.getCards = (req, res) => {
   Card.find({})
-    .then((card) => res.send({ card }))
+    .then((cards) => res.send({ cards }))
     .catch((err) => res.status(500).send({ message: err }));
 };

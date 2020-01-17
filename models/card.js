@@ -1,7 +1,13 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const uuid = require('uuid');
 
 const cardSchema = new mongoose.Schema({
+  _id: {
+    type: String,
+    index: { unique: true },
+    default: uuid.v4,
+  },
   name: {
     type: String,
     required: true,
@@ -33,7 +39,7 @@ const cardSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
     required: true,
-  }
+  },
 });
 
 module.exports = mongoose.model('card', cardSchema);
