@@ -1,12 +1,13 @@
 const Card = require('../models/card');
+const MyError = require('../modules/error');
 
 module.exports.createCard = (req, res) => {
   const {
-    name, link, likes, createdAt,
+    name, link, likes,
   } = req.body;
   const owner = req.user._id;
   Card.create({
-    name, link, owner, likes, createdAt,
+    name, link, owner, likes,
   })
     .then((card) => res.send({ card }))
     .catch((err) => res.status(500).send({ message: err }));
@@ -16,9 +17,11 @@ module.exports.deleteCard = (req, res) => {
   const { id } = req.params;
   Card.findByIdAndDelete(id)
     .then((card) => {
-      const error = { message: 'Объект не найден', code: 404 };
       if (!card) {
-        throw error;
+        throw new MyError('Объект не найден', 404);
+      }
+      if (card.owner.toString() !== id) {
+        throw new MyError('Недостаточно прав', 405);
       }
       res.json(card);
     })

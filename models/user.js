@@ -1,14 +1,8 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
-const uuid = require('uuid');
 
 const userSchema = new mongoose.Schema({
-  _id: {
-    type: String,
-    index: { unique: true },
-    default: uuid.v4,
-  },
   name: {
     type: String,
     required: true,
@@ -31,11 +25,11 @@ const userSchema = new mongoose.Schema({
     },
     required: true,
   },
-  emalil: {
+  email: {
     type: String,
     validate: {
       validator(str) {
-        return validator.isEMAIL(str);
+        return validator.isEmail(str);
       },
       message: 'Эта строка должна быть EMAIL',
     },
@@ -45,12 +39,14 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
+    select: false,
     minlength: 8,
   },
 });
 
 userSchema.statics.findUserByCredentials = function (email, password) {
   return this.findOne({ email })
+    .select('+password')
     .then((user) => {
       if (!user) {
         return Promise.reject(new Error('Неправильные почта или пароль'));
