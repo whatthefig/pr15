@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const { celebrate, Joi } = require('celebrate');
 const cardsRout = require('./routes/cards');
 const userRout = require('./routes/users');
 const auth = require('./middlewares/auth');
@@ -12,7 +13,7 @@ app.use(cookieParser());
 
 const { PORT = 3000 } = process.env;
 
-mongoose.connect('mongodb://localhost:27017/mybd', {
+mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
@@ -23,7 +24,11 @@ app.get('/posts', (req, res) => console.log(`Токен: ${req.cookies.jwt}`));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.post('/signup', createUser);
+app.post('/signup', celebrate({
+  body: Joi.object().keys({
+    password: Joi.string().required().min(8),
+  }),
+}), createUser);
 app.post('/signin', login);
 
 app.use(auth);

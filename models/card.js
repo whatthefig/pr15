@@ -1,7 +1,13 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const uuid = require('uuid');
 
 const cardSchema = new mongoose.Schema({
+  _id: {
+    type: String,
+    index: { unique: true },
+    default: uuid.v4,
+  },
   name: {
     type: String,
     required: true,
@@ -19,7 +25,7 @@ const cardSchema = new mongoose.Schema({
     required: true,
   },
   owner: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.String,
     ref: 'user',
     required: true,
   },

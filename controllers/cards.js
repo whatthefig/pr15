@@ -15,15 +15,17 @@ module.exports.createCard = (req, res) => {
 
 module.exports.deleteCard = (req, res) => {
   const { id } = req.params;
-  Card.findByIdAndDelete(id)
+  Card.findById(id)
     .then((card) => {
       if (!card) {
-        throw new MyError('Объект не найден', 404);
+        throw new MyError('Объект не найден', 402);
       }
-      if (card.owner.toString() !== id) {
-        throw new MyError('Недостаточно прав', 405);
+      if (card.owner !== req.user._id) {
+        throw new MyError('Недостаточно прав', 403);
+      } else {
+        Card.findByIdAndDelete(id)
+          .then((deletedcard) => res.send({ deletedcard }));
       }
-      res.json(card);
     })
     .catch((err) => res.status(err.code || 500).json({ message: err.message }));
 };
