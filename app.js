@@ -1,17 +1,21 @@
 const express = require('express');
+require('dotenv').config();
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-const { celebrate, Joi } = require('celebrate');
+const { celebrate, Joi, errors } = require('celebrate');
 const cardsRout = require('./routes/cards');
 const userRout = require('./routes/users');
 const auth = require('./middlewares/auth');
 const { createUser, login } = require('./controllers/users');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
+
+console.log(process.env.NODE_ENV);
 
 const app = express();
 app.use(cookieParser());
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3001 } = process.env;
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
@@ -23,6 +27,7 @@ app.get('/posts', (req, res) => console.log(`Токен: ${req.cookies.jwt}`));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(requestLogger);
 
 app.post('/signup', celebrate({
   body: Joi.object().keys({
@@ -33,12 +38,24 @@ app.post('/signup', celebrate({
     email: Joi.string().required().email(),
   }),
 }), createUser);
-app.post('/signin', login);
+app.post('/signin', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required().min(8),
+  }),
+}), login);
 
 app.use(auth);
 
 app.use('/', userRout);
 app.use('/', cardsRout);
-app.use((req, res) => res.status(404).send({ message: 'Запрашиваемый ресурс не найден' }));
+
+app.use(errorLogger);
+
+app.use(errors());
+
+app.use((err, req, res, next) => {
+  res.status(err.code || 500).json({ message: err.message } || { message: 'На сервере произошла ошибка' });
+});
 
 app.listen(PORT, () => console.log(`Используется порт ${PORT}`));
