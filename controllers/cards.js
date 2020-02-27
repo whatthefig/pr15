@@ -28,7 +28,9 @@ module.exports.deleteCard = (req, res, next) => {
           .catch(next);
       }
     })
-    .then((card) => res.send({ card }))
+    .then(() => {
+      res.send({ message: 'Объект удален' });
+    })
     .catch(next);
 };
 

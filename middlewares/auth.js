@@ -1,4 +1,3 @@
-
 const jwt = require('jsonwebtoken');
 const MyError = require('../modules/error');
 
