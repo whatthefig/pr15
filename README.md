@@ -1,6 +1,6 @@
 <h1>Практическая работа №15</h1>
 
-https://github.com/whatthefig/pr15
+http://app-mesto.site/
 
 *v0.2.1*
 
