@@ -23,8 +23,6 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useFindAndModify: false,
 });
 
-app.get('/posts', (req, res) => console.log(`Токен: ${req.cookies.jwt}`));
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(requestLogger);
@@ -62,6 +60,7 @@ app.use(errors());
 
 app.use((err, req, res, next) => {
   res.status(err.code || 500).json({ message: err.message } || { message: 'На сервере произошла ошибка' });
+  next();
 });
 
 app.listen(PORT, () => console.log(`Используется порт ${PORT}`));
