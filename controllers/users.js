@@ -26,12 +26,18 @@ module.exports.createUser = (req, res, next) => {
   const {
     name, about, avatar, email,
   } = req.body;
-  bcrypt.hash(req.body.password, 10)
-    .then((hash) => User.create({
-      name, about, avatar, email, password: hash,
-    }))
-    .then(() => {
-      res.send({ message: 'Пользователь создан' });
+  User.findOne({ email })
+    .then((user) => {
+      if (user) {
+        throw new MyError('Пользователь с таким email уже зарегистрирован', 405);
+      }
+      bcrypt.hash(req.body.password, 10)
+        .then((hash) => User.create({
+          name, about, avatar, email, password: hash,
+        }))
+        .then(() => {
+          res.send({ message: 'Пользователь создан' });
+        });
     })
     .catch(next);
 };
