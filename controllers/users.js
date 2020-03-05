@@ -6,7 +6,7 @@ const MyError = require('../modules/error');
 
 module.exports.findUser = (req, res, next) => {
   const { id } = req.params;
-  User.findById(id)
+  User.find({ id })
     .then((user) => {
       if (!user) {
         throw new MyError('Пользователь не найден', 401);
@@ -46,7 +46,7 @@ module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev', { expiresIn: '7d' });
+      const token = jwt.sign({ id: user.id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev', { expiresIn: '7d' });
       res
         .cookie('jwt', token, {
           maxAge: 3600 * 24 * 7,
