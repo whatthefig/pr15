@@ -3,7 +3,7 @@ const validator = require('validator');
 const uuid = require('uuid');
 
 const cardSchema = new mongoose.Schema({
-  id: {
+  _id: {
     type: String,
     index: { unique: true },
     default: uuid.v4,

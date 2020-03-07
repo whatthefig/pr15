@@ -1,5 +1,5 @@
-const express = require('express');
 require('dotenv').config();
+const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
@@ -14,6 +14,9 @@ console.log(process.env.NODE_ENV);
 
 const app = express();
 app.use(cookieParser());
+
+app.get('/posts', (req) => console.log(req.cookies.jwt));
+
 
 const { PORT = 3001 } = process.env;
 

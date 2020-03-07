@@ -5,7 +5,7 @@ const uuid = require('uuid');
 const MyError = require('../modules/error');
 
 const userSchema = new mongoose.Schema({
-  id: {
+  _id: {
     type: String,
     index: { unique: true },
     default: uuid.v4,
