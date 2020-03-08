@@ -1,8 +1,8 @@
 <h1>Практическая работа №15</h1>
 
-http://mesto-web.site/
+http://www.mesto-web.site/
 
-https://mesto-web.site/
+https://www.mesto-web.site/
 
 ip: 84.201.143.177
 
