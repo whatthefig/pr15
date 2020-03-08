@@ -21,7 +21,7 @@ module.exports.deleteCard = (req, res, next) => {
         throw new MyError('Объект не найден', 404);
       }
       if (card.owner !== req.user._id) {
-        throw new MyError('Недостаточно прав', 401);
+        throw new MyError('Недостаточно прав', 403);
       } else {
         Card.findByIdAndDelete(id)
           .then(() => res.send({ message: 'Объект удален' }))
