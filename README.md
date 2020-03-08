@@ -1,8 +1,9 @@
 <h1>Практическая работа №15</h1>
 
-http://app-mesto.site/
+http://mesto-web.site/
+https://mesto-web.site/
 
-ip: 84.201.164.13
+ip: 84.201.138.42
 
 *v0.2.1*
 
