@@ -5,7 +5,7 @@ module.exports.createCard = (req, res, next) => {
   const {
     name, link, likes,
   } = req.body;
-  const owner = req.user.id;
+  const owner = req.user._id;
   Card.create({
     name, link, owner, likes,
   })
@@ -15,15 +15,15 @@ module.exports.createCard = (req, res, next) => {
 
 module.exports.deleteCard = (req, res, next) => {
   const { id } = req.params;
-  Card.findOne({ id })
+  Card.findById(id)
     .then((card) => {
       if (!card) {
         throw new MyError('Объект не найден', 404);
       }
-      if (card.owner !== req.user.id) {
-        throw new MyError('Недостаточно прав', 401);
+      if (card.owner !== req.user._id) {
+        throw new MyError('Недостаточно прав', 403);
       } else {
-        Card.findOneAndDelete({ id })
+        Card.findByIdAndDelete(id)
           .then(() => res.send({ message: 'Объект удален' }))
           .catch(next);
       }

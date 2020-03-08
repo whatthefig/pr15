@@ -15,6 +15,8 @@ console.log(process.env.NODE_ENV);
 const app = express();
 app.use(cookieParser());
 
+app.get('/posts', (req) => console.log(`Токен: ${req.cookies.jwt}`));
+
 const { PORT = 3001 } = process.env;
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {

@@ -1,15 +1,9 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
-const uuid = require('uuid');
 const MyError = require('../modules/error');
 
 const userSchema = new mongoose.Schema({
-  id: {
-    type: String,
-    index: { unique: true },
-    default: uuid.v4,
-  },
   name: {
     type: String,
     required: true,

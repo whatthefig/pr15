@@ -6,10 +6,10 @@ const MyError = require('../modules/error');
 
 module.exports.findUser = (req, res, next) => {
   const { id } = req.params;
-  User.find({ id })
+  User.findById(id)
     .then((user) => {
       if (!user) {
-        throw new MyError('Пользователь не найден', 401);
+        throw new MyError('Пользователь не найден', 404);
       }
       res.json(user);
     })
@@ -29,7 +29,7 @@ module.exports.createUser = (req, res, next) => {
   User.findOne({ email })
     .then((user) => {
       if (user) {
-        throw new MyError('Пользователь с таким email уже зарегистрирован', 405);
+        throw new MyError('Пользователь с такими данными уже зарегистрирован', 409);
       }
       bcrypt.hash(req.body.password, 10)
         .then((hash) => User.create({
@@ -46,11 +46,12 @@ module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ id: user.id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev', { expiresIn: '7d' });
+      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev', { expiresIn: '7d' });
       res
         .cookie('jwt', token, {
           maxAge: 3600 * 24 * 7,
           httpOnly: true,
+          sameSite: true,
         })
         .end();
     })

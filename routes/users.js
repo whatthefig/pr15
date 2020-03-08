@@ -10,7 +10,7 @@ userRout.get('/users', getUsers);
 
 userRout.get('/users/:id', celebrate({
   params: Joi.object().keys({
-    id: Joi.string(),
+    id: Joi.objectId(),
   }),
 }), findUser);
 

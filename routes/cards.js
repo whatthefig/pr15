@@ -15,7 +15,7 @@ cardsRout.post('/cards', celebrate({
 
 cardsRout.delete('/cards/:id', celebrate({
   params: Joi.object().keys({
-    id: Joi.string(),
+    id: Joi.objectId(),
   }),
 }), deleteCard);
 

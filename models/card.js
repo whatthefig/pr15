@@ -1,13 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
-const uuid = require('uuid');
 
 const cardSchema = new mongoose.Schema({
-  id: {
-    type: String,
-    index: { unique: true },
-    default: uuid.v4,
-  },
   name: {
     type: String,
     required: true,
