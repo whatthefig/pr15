@@ -29,7 +29,7 @@ module.exports.createUser = (req, res, next) => {
   User.findOne({ email })
     .then((user) => {
       if (user) {
-        throw new MyError('Пользователь с такими данными уже зарегистрирован', 409);
+        throw new MyError('Пользователь с такими данными уже зарегистрирован', 405);
       }
       bcrypt.hash(req.body.password, 10)
         .then((hash) => User.create({
