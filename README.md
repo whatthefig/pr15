@@ -1,9 +1,10 @@
 <h1>Практическая работа №15</h1>
 
-http://mesto-web.site/
-https://mesto-web.site/
+http://www.mesto-web.site/
 
-ip: 84.201.138.42
+https://www.mesto-web.site/
+
+ip: 84.201.143.177
 
 *v0.2.1*
 
