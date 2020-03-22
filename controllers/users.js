@@ -1,9 +1,10 @@
+const { NODE_ENV, JWT_SECRET } = process.env;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const MyError = require('../modules/error');
 
-module.exports.findUser = (req, res) => {
+module.exports.findUser = (req, res, next) => {
   const { id } = req.params;
   User.findById(id)
     .then((user) => {
@@ -12,42 +13,48 @@ module.exports.findUser = (req, res) => {
       }
       res.json(user);
     })
-    .catch((err) => res.status(err.code || 500).json({ message: err.message }));
+    .catch(next);
 };
 
-module.exports.getUsers = (req, res) => {
+module.exports.getUsers = (req, res, next) => {
   User.find({})
-    .then((users) => res.send({ users }))
-    .catch((err) => res.status(500).send({ message: err }));
+    .then((users) => res.json(users))
+    .catch(next);
 };
 
-module.exports.createUser = (req, res) => {
+module.exports.createUser = (req, res, next) => {
   const {
     name, about, avatar, email,
   } = req.body;
-  bcrypt.hash(req.body.password, 10)
-    .then((hash) => User.create({
-      name, about, avatar, email, password: hash,
-    }))
-    .then((user) => res.send({ data: user }))
-    .catch((err) => res.status(500).send({ message: err }));
+  User.findOne({ email })
+    .then((user) => {
+      if (user) {
+        throw new MyError('Пользователь с такими данными уже зарегистрирован', 409);
+      }
+      bcrypt.hash(req.body.password, 10)
+        .then((hash) => User.create({
+          name, about, avatar, email, password: hash,
+        }))
+        .then(() => {
+          res.send({ message: 'Пользователь создан' });
+        });
+    })
+    .catch(next);
 };
 
-module.exports.login = (req, res) => {
+module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
+      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev', { expiresIn: '7d' });
       res
         .cookie('jwt', token, {
           maxAge: 3600 * 24 * 7,
           httpOnly: true,
+          sameSite: true,
         })
+        .send({ JWT_SECRET })
         .end();
     })
-    .catch((err) => {
-      res
-        .status(401)
-        .send({ message: err.message });
-    });
+    .catch(next);
 };
